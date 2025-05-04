@@ -7,6 +7,7 @@ parent_id: '0'
 published: true
 password: ''
 status: publish
+description: A glimpse inside CryptoWall 3.0
 permalink: '/cryptowall-3-0-traffic-analysis/'
 
 ---
