@@ -1,6 +1,14 @@
 ---
+layout: post
 title: "CryptoWall 3.0 traffic analysis"
 date: 2015-10-29
+type: post
+parent_id: '0'
+published: true
+password: ''
+status: publish
+permalink: '/cryptowall-3-0-traffic-analysis/'
+
 ---
 
 # A glimpse inside CryptoWall 3.0
