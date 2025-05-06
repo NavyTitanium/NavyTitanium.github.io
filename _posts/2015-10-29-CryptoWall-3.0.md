@@ -93,7 +93,7 @@ The malware first sends a hello message to the C&C before getting the actual enc
 
 ![](/images/first-message.png)
 
-Using [this python](/rc4.py) code, we can decrypt the message easily:
+Using [this python](/assets/rc4.py) code, we can decrypt the message easily:
 
 Request: `{1|crypt13|4FB5B06D293F2DD13810B2979DBA08E0|5|2|1||128.204.196.126}`
 
@@ -131,7 +131,7 @@ However, two of the WordPress observed had a [PHP backdoor](https://www.microsof
 
 ![php_backdoor_censored3](/images/php_backdoor_censored2.jpg)
 
-With this malicious code, they can access and control multiple things on the servers. Furthermore, this allowed us to download the code which serves to respond to infected computers. Getting our hands [on this file](/3.php) allowed us to move forward to better understand the communication and the infection process. What we can see in [this PHP code](/3.php) is that the ransomware:
+With this malicious code, they can access and control multiple things on the servers. Furthermore, this allowed us to download the code which serves to respond to infected computers. Getting our hands [on this file](/assets/3.php) allowed us to move forward to better understand the communication and the infection process. What we can see in [this PHP code](/assets/3.php) is that the ransomware:
 
 - Decrypts the encrypted message with the RC4 key in the parameter
 - Makes validation to ensure that the message is in the good format and strips the bracket
