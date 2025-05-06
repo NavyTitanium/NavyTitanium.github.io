@@ -12,13 +12,13 @@ permalink: /cryptowall-3-0-traffic-analysis/
 
 CryptoWall is known to be one the most popular ransomware. [The FBI](http://www.ic3.gov/media/2015/150623.aspx) says it has received 992 complaints about CryptoWall, with victims reporting losses of $18m. [Symantec](https://www4.symantec.com/mktginfo/whitepaper/ISTR/21347932_GA-internet-security-threat-report-volume-20-2015-social_v2.pdf) also said that ransomware attacks have more than doubled in 2014 from 4.1 million in 2013, up to 8.8 million. It's using today's most sophisticated exploit kit such as Nuclear, Neutrino, and Angler in order to infect the victim. Consequently, this ransomware is using all ways possible to infect victims. The main goal of this destructive malware is to search for all file with certain extensions on the computer victim and network drives to encrypt them. It then asks for a ransom, which is normally $500 USD (and doubles after a certain period of time) for decryption.
 
-![](/images/ransom.png)
+![Ransom payment over TOR](/images/ransom.png)
 
 **Infection Vector**
 
 The ransomware has multiple ways to infect victims. However, we often see malicious infected email attachments sent to victims containing the dropper. One of the dropper that we studied came from an email attachment in a .zip file. It contained an obfuscated JavaScript file which is used for downloading the payload. It is also common to see word documents containing a malicious VBA macro.
 
-![](/images/zip_info-2.png)
+![The malicious email attachment](/images/zip_info-2.png)
 
 After deobfuscation of the file, we got this code:
 
@@ -50,7 +50,7 @@ ws.Run(fn, 0, 0);
 
 This script is used to download the payload (from a hard coded URL) of CryptoWall 3.0, rename it and execute it from the TEMP directory. It's interesting to note that the original payload is a .JPG file, which is a simple trick to hide itself.
 
-![](/images/dropper.jpg)
+![dropper](/images/dropper.jpg)
 
 We believe that this domain (22072014b.com) is owned by the bad guy and it's also seems to use the fast flux DNS technique. However, this domain is currently suspended by the ICANN.
 
@@ -103,7 +103,7 @@ The message is formatted for the command and control, revealing: the message ID,
 
 After, the infected computer replies with another message:
 
-![](/images/cryptowall-response.png)
+![first-message](/images/first-message.png)
 
 Request: `{7|crypt13|4FB5B06D293F2DD13810B2979DBA08E0|1}`
 
@@ -129,7 +129,7 @@ To advance further in the investigation, we chose to take a look at recent sampl
 
 However, two of the WordPress observed had a [PHP backdoor](https://www.microsoft.com/security/portal/threat/encyclopedia/entry.aspx?name=Backdoor%3aPHP%2fWebShell.A&threatid=2147651339&enterprise=0) installed, which is a PHP file that allows the attacker to have a web control panel:
 
-![php_backdoor_censored3](images/php_backdoor_censored2.jpg)
+![php_backdoor_censored3](/images/php_backdoor_censored2.jpg)
 
 With this malicious code, they can access and control multiple things on the servers. Furthermore, this allowed us to download the code which serves to respond to infected computers. Getting our hands [on this file](3.php) allowed us to move forward to better understand the communication and the infection process. What we can see in [this PHP code](3.php) is that the ransomware:
 
@@ -139,7 +139,7 @@ With this malicious code, they can access and control multiple things on the ser
 
 We tried it by installing a PHP server on a local computer and making a fake call to the CryptoWall PHP file. We then captured the traffic exchanged between the server and the mothership:
 
-![wordpress_to_mothership](images/wordpress_to_mothership.png)
+![wordpress_to_mothership](/images/wordpress_to_mothership.png)
 
 Request: `{7|crypt19|7A1A7EA984BD56663C7A5558576C3559|1}`
 
@@ -153,20 +153,20 @@ After removing redundant entries in both files by comparing the unique identifie
 
 We then used Elastic Search and Kibana to visually represent the data:
 
-![Requests made to the first WordPress site over 29 hours](images/users-request-first-file.png)
+![Requests made to the first WordPress site over 29 hours](/images/users-request-first-file.png)
 
 ![Requests made to the second WordPress site over 88 hours](images/user-request-second-file-1024x440.png)
 
 We then aggregated the data of both WordPress sites to pull out statistics about the victims. The MaxMind databases were used to find the country and the AS from the originating IP addresses of those entries:
 
 **Top originating AS of victims**
-![Top originating AS of victims](images/top-30-AS-246x300.png)
+![Top originating AS of victims](/images/top-30-AS-246x300.png)
 
 **Top country of victims**
-![Top country of victims](images/top-20-country-257x300.png)
+![Top country of victims](/images/top-20-country-257x300.png)
 
 **World map representing victim's location from our dataset**
-![geoloc-global](images/geoloc-global.png)
+![geoloc-global](/images/geoloc-global.png)
 
 Multiple sub-versions of CryptoWall were also observed:
 
