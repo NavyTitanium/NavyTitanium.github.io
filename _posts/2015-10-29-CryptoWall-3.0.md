@@ -50,7 +50,7 @@ ws.Run(fn, 0, 0);
 
 This script is used to download the payload (from a hard coded URL) of CryptoWall 3.0, rename it and execute it from the TEMP directory. It's interesting to note that the original payload is a .JPG file, which is a simple trick to hide itself.
 
-![dropper](images/dropper.jpg)
+![](/images/dropper.jpg)
 
 We believe that this domain (22072014b.com) is owned by the bad guy and it's also seems to use the fast flux DNS technique. However, this domain is currently suspended by the ICANN.
 
@@ -91,7 +91,7 @@ All communication with the C&C is encrypted in RC4. The RC4 key is passed in the
 
 The malware first sends a hello message to the C&C before getting the actual encryption key:
 
-![first-message](images/first-message.png)
+![](/images/first-message.png)
 
 Using [this python](rc4.py) code, we can decrypt the message easily:
 
@@ -103,7 +103,7 @@ The message is formatted for the command and control, revealing: the message ID,
 
 After, the infected computer replies with another message:
 
-![cryptowall-response](images/cryptowall-response.png)
+![](/images/cryptowall-response.png)
 
 Request: `{7|crypt13|4FB5B06D293F2DD13810B2979DBA08E0|1}`
 
@@ -170,7 +170,7 @@ We then aggregated the data of both WordPress sites to pull out statistics about
 
 Multiple sub-versions of CryptoWall were also observed:
 
-![Different version used by CryptoWall](images/top-versions-258x300.png)
+![Different version used by CryptoWall](/images/top-versions-258x300.png)
 
 By regrouping both sets of data together and removing the duplicate entries based on the MD5 hash, we accumulated 18614 unique infected users. On the first set of data, 3546 unique ID's were collected over a period of 29h, which makes approximately 122.27 unique victims per hour. On the second set of data, 15068 unique ID's were collected, over a period of 88h, which makes approximately 171.22 unique victims per hour. Calculating the average of both, we obtain approximately 146 unique infected users per hour, which make 3504 per day and 105120 per month. Using numbers from USCert via [Symantec](https://www.symantec.com/content/en/us/enterprise/media/security_response/whitepapers/ransomware-a-growing-menace.pdf) 2.9% of users pay the ransom approximately. With an average ransom of $500, this meant malicious actors profited $52560 per day, $1576800 per month and $18921600 per year just with this part of the infrastructure that was discovered.  However, it is difficult to be 100% accurate with these numbers.
 
@@ -178,36 +178,36 @@ By regrouping both sets of data together and removing the duplicate entries base
 
 Since we now had the IP address of the mothership from the PHP files on the infected WordPress, we started investigating it. The first IP was 95.128.182.22 and the second 95.128.182.121. Both of the IP were registered by an ISP named TrustInfo, in Moscow, Russia. The IP addresses have at least 3 open ports in common: 22, 80 and 3389. By browsing through them, we can't see much except a blank page on the main page. But after looking for other active pages on the servers, we found that the server status page was enabled:
 
-![server-statuspage](images/server-statuspage.png)
+![server-statuspage](/images/server-statuspage.png)
 
 As you can see, the server is apparently hosting a TOR hidden website (xtpdvz6dnj5nnpe7.onion). This hidden website is also a known TOR address from the ransom of CryptoWall 3.0. It's using NGINX proxy to forward requests. The POST requests that we're seeing are all the different WordPress sites forwarding the requests to the MotherShip and the parameter on each of these requests are the RC4 key for decrypting the communication.
 
-![Accessing the ransom page directly](images/decrypt-service.png)
+![Accessing the ransom page directly](/images/decrypt-service.png)
 
 By taking a look at the [autonomous system information](http://bgp.he.net/AS48757), we saw that the ISP TrustInfo has 3 subnets. We decided to investigate further in those subnets, searching for servers that had the same ports open with the same version of services. For instance, we looked for hosts that had port 22 with OpenSSH version 6.0 responding to the criteria and port 80 with NGINX 1.2.1. One subnet in particular, 95.128.180.0/22 had a lots of hosts responding to this criteria.
 
 After verifying each of them, by establishing if the page http://ip/server-status/ showed us the same TOR address and had the same uptime, we found 9 more servers than the two previously discovered:
 
-![CryptoWall 3.0 architecture](images/schema-1024x734.png)
+![CryptoWall 3.0 architecture](/images/schema-1024x734.png)
 
 Thus, motherships servers are playing at least two roles: forwarding the requests of infected victims and supporting the TOR website to pay the ransom. Since NGINX is installed on all of them, and they all refer to the same Apache server, they seem to serve only as a gateway, so that makes us believe that the secrete keys are stored elsewhere, well kept away from us.
 
 By comparing all the different requests made on the server status page, some GET requests got our attention. This lead us to a login page on this same server:
 
-![login mothership](images/login-mothership.png)
+![login mothership](/images/login-mothership.png)
 
 At first look, it seems to be the management page for the owners of CryptoWall. This page seems to be custom made. They are doing basic authentication with a username and a password. The password is hashed in MD5 client-side before being passed by the POST request to the server. After 3 failed attempts, the system refuses any more tries. It is however possible to reset the number of failed attempts by deleting the PHPSESSID cookie. However, we don't know what this page provides access to.
 
 After monitoring the status page, we also did some statistics:
 
-![Request type received by the server](images/requests-type-300x207.png)
+![Request type received by the server](/images/requests-type-300x207.png)
 
-![CPU load over time](images/average-CPU-load-1024x356.png)
+![CPU load over time](/images/average-CPU-load-1024x356.png)
 
-![Total access requests to the server over time](images/Total-access-1024x208.png)
+![Total access requests to the server over time](/images/Total-access-1024x208.png)
 
 
-![At its peak, the server behind the proxy has processed almost 44 GB of data in 30 days](images/status-at-peak.png)
+![At its peak, the server behind the proxy has processed almost 44 GB of data in 30 days](/images/status-at-peak.png)
 
 **Protection against ransomware**
 
