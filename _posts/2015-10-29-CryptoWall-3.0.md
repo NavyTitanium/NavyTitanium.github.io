@@ -135,7 +135,6 @@ To advance further in the investigation, we chose to take a look at recent sampl
 
 However, two of the WordPress observed had a [PHP backdoor](https://www.microsoft.com/security/portal/threat/encyclopedia/entry.aspx?name=Backdoor%3aPHP%2fWebShell.A&threatid=2147651339&enterprise=0) installed, which is a PHP file that allows the attacker to have a web control panel:
 
-<figure>
 ![php_backdoor_censored3](/images/php_backdoor_censored2.jpg)
 
 With this malicious code, they can access and control multiple things on the servers. Furthermore, this allowed us to download the code which serves to respond to infected computers. Getting our hands [on this file](/assets/3.php) allowed us to move forward to better understand the communication and the infection process. What we can see in [this PHP code](/assets/3.php) is that the ransomware:
