@@ -12,7 +12,10 @@ permalink: /cryptowall-3-0-traffic-analysis/
 
 CryptoWall is known to be one the most popular ransomware. [The FBI](http://www.ic3.gov/media/2015/150623.aspx) says it has received 992 complaints about CryptoWall, with victims reporting losses of $18m. [Symantec](https://www4.symantec.com/mktginfo/whitepaper/ISTR/21347932_GA-internet-security-threat-report-volume-20-2015-social_v2.pdf) also said that ransomware attacks have more than doubled in 2014 from 4.1 million in 2013, up to 8.8 million. It's using today's most sophisticated exploit kit such as Nuclear, Neutrino, and Angler in order to infect the victim. Consequently, this ransomware is using all ways possible to infect victims. The main goal of this destructive malware is to search for all file with certain extensions on the computer victim and network drives to encrypt them. It then asks for a ransom, which is normally $500 USD (and doubles after a certain period of time) for decryption.
 
-![Ransom payment over TOR](/images/ransom.png)
+<figure>
+  <img src="/images/ransom.png" alt="Ransom payment over TOR">
+  <figcaption>Ransom payment over TOR</figcaption>
+</figure>
 
 **Infection Vector**
 
