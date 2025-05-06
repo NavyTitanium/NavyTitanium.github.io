@@ -203,25 +203,13 @@ At first look, it seems to be the management page for the owners of CryptoWall. 
 
 After monitoring the status page, we also did some statistics:
 
-<figure>
 ![Request type received by the server](/images/requests-type-300x207.png)
-  <figcaption>Request type received by the server</figcaption>
-</figure>
 
-<figure>
 ![CPU load over time](/images/average-CPU-load-1024x356.png)
-  <figcaption>CPU load over time</figcaption>
-</figure>
 
-<figure>
 ![Total access requests to the server over time](/images/Total-access-1024x208.png)
-  <figcaption>Total access requests to the server over time</figcaption>
-</figure>
 
-<figure>
 ![At its peak, the server behind the proxy has processed almost 44 GB of data in 30 days](/images/status-at-peak.png)
-  <figcaption>At its peak, the server behind the proxy has processed almost 44 GB of data in 30 days</figcaption>
-</figure>
 
 **Protection against ransomware**
 
