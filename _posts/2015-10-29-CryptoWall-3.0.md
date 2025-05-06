@@ -22,7 +22,7 @@ CryptoWall is known to be one the most popular ransomware. [The FBI](http://www.
 The ransomware has multiple ways to infect victims. However, we often see malicious infected email attachments sent to victims containing the dropper. One of the dropper that we studied came from an email attachment in a .zip file. It contained an obfuscated JavaScript file which is used for downloading the payload. It is also common to see word documents containing a malicious VBA macro.
 
 <figure>
-![The malicious email attachment](/images/zip_info-2.png)
+<img src="/images/zip_info-2.png" alt="The malicious email attachment">
   <figcaption>The malicious email attachment</figcaption>
 </figure>
 
