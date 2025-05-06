@@ -159,39 +159,21 @@ After removing redundant entries in both files by comparing the unique identifie
 
 We then used Elastic Search and Kibana to visually represent the data:
 
-<figure>
 ![Requests made to the first WordPress site over 29 hours](/images/users-request-first-file.png)
-  <figcaption>Requests made to the first WordPress site over 29 hours</figcaption>
-</figure>
 
-<figure>
 ![Requests made to the second WordPress site over 88 hours](images/user-request-second-file-1024x440.png)
-  <figcaption>Requests made to the second WordPress site over 88 hours</figcaption>
-</figure>
 
 We then aggregated the data of both WordPress sites to pull out statistics about the victims. The MaxMind databases were used to find the country and the AS from the originating IP addresses of those entries:
 
-<figure>
 ![Top originating AS of victims](/images/top-30-AS-246x300.png)
-  <figcaption>Top originating AS of victims</figcaption>
-</figure>
 
-<figure>
 ![Top country of victims](/images/top-20-country-257x300.png)
-  <figcaption>Top country of victims</figcaption>
-</figure>
 
-<figure>
 ![geoloc-global](/images/geoloc-global.png)
-  <figcaption>World map representing victim's location from our dataset</figcaption>
-</figure>
 
 Multiple sub-versions of CryptoWall were also observed:
 
-<figure>
 ![Different version used by CryptoWall](/images/top-versions-258x300.png)
-  <figcaption>Different version used by CryptoWall</figcaption>
-</figure>
 
 By regrouping both sets of data together and removing the duplicate entries based on the MD5 hash, we accumulated 18614 unique infected users. On the first set of data, 3546 unique ID's were collected over a period of 29h, which makes approximately 122.27 unique victims per hour. On the second set of data, 15068 unique ID's were collected, over a period of 88h, which makes approximately 171.22 unique victims per hour. Calculating the average of both, we obtain approximately 146 unique infected users per hour, which make 3504 per day and 105120 per month. Using numbers from USCert via [Symantec](https://www.symantec.com/content/en/us/enterprise/media/security_response/whitepapers/ransomware-a-growing-menace.pdf) 2.9% of users pay the ransom approximately. With an average ransom of $500, this meant malicious actors profited $52560 per day, $1576800 per month and $18921600 per year just with this part of the infrastructure that was discovered.  However, it is difficult to be 100% accurate with these numbers.
 
