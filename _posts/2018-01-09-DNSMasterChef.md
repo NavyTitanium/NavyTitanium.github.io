@@ -1,3 +1,11 @@
+---
+layout: post
+title: "Setting up a DNS Firewall on steroids"
+date: 2018-01-09
+description: Setting up a DNS Firewall on steroids
+permalink: /DNSMasterChef/
+---
+
 ## Setting up a DNS Firewall on steroids
 
 The idea is to setup a local Bind recursive DNS server to improve the overall security of a network by filtering known nasty domains. This is done by first configuring RPZ with multiple lists of domains/IPs to block, then using the python script I developed that allows the filtering of unsafe requests based on multiple DNS threat blocking providers.
