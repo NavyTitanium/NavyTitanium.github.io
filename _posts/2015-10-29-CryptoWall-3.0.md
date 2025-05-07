@@ -14,7 +14,7 @@ CryptoWall is known to be one the most popular ransomware. [The FBI](http://www.
 
 <figure>
   <img src="/images/ransom.png" alt="Ransom payment over TOR">
-  <figcaption>Ransom payment over TOR</figcaption>
+  <figcaption>CryptoWall payment page</figcaption>
 </figure>
 
 **Infection Vector**
@@ -23,7 +23,7 @@ The ransomware has multiple ways to infect victims. However, we often see malici
 
 <figure>
 <img src="/images/zip_info-2.png" alt="The malicious email attachment">
-  <figcaption>The malicious email attachment</figcaption>
+  <figcaption>.ZIP file received by email, containing a JavaScript file</figcaption>
 </figure>
 
 After deobfuscation of the file, we got this code:
@@ -159,21 +159,39 @@ After removing redundant entries in both files by comparing the unique identifie
 
 We then used Elastic Search and Kibana to visually represent the data:
 
-![Requests made to the first WordPress site over 29 hours](/images/users-request-first-file.png)
+<figure>
+<img src="/images/users-request-first-file.png" alt="Requests made to the first WordPress site over 29 hours">
+  <figcaption>Requests made to the first WordPress site over 29 hours</figcaption>
+</figure>
 
-![Requests made to the second WordPress site over 88 hours](images/user-request-second-file-1024x440.png)
+<figure>
+<img src="/imagesuser-request-second-file-1024x440.png" alt="Requests made to the second WordPress site over 88 hours">
+  <figcaption>Requests made to the second WordPress site over 88 hours</figcaption>
+</figure>
 
 We then aggregated the data of both WordPress sites to pull out statistics about the victims. The MaxMind databases were used to find the country and the AS from the originating IP addresses of those entries:
 
-![Top originating AS of victims](/images/top-30-AS-246x300.png)
+<figure>
+<img src="/images/top-30-AS-246x300.png" alt="Top originating AS of victims">
+  <figcaption>Top originating AS of victims</figcaption>
+</figure>
 
-![Top country of victims](/images/top-20-country-257x300.png)
+<figure>
+<img src="/images/top-20-country-257x300.png" alt="Top country of victims">
+  <figcaption>Top country of victims</figcaption>
+</figure>
 
-![geoloc-global](/images/geoloc-global.png)
+<figure>
+<img src="/images/geoloc-global.png" alt="geoloc-global">
+  <figcaption>World map representing victim’s location from our dataset</figcaption>
+</figure>
 
 Multiple sub-versions of CryptoWall were also observed:
 
-![Different version used by CryptoWall](/images/top-versions-258x300.png)
+<figure>
+<img src="/images/top-versions-258x300.png" alt="Different version used by CryptoWall">
+  <figcaption>Different version used by CryptoWall</figcaption>
+</figure>
 
 By regrouping both sets of data together and removing the duplicate entries based on the MD5 hash, we accumulated 18614 unique infected users. On the first set of data, 3546 unique ID's were collected over a period of 29h, which makes approximately 122.27 unique victims per hour. On the second set of data, 15068 unique ID's were collected, over a period of 88h, which makes approximately 171.22 unique victims per hour. Calculating the average of both, we obtain approximately 146 unique infected users per hour, which make 3504 per day and 105120 per month. Using numbers from USCert via [Symantec](https://www.symantec.com/content/en/us/enterprise/media/security_response/whitepapers/ransomware-a-growing-menace.pdf) 2.9% of users pay the ransom approximately. With an average ransom of $500, this meant malicious actors profited $52560 per day, $1576800 per month and $18921600 per year just with this part of the infrastructure that was discovered.  However, it is difficult to be 100% accurate with these numbers.
 
@@ -185,13 +203,19 @@ Since we now had the IP address of the mothership from the PHP files on the infe
 
 As you can see, the server is apparently hosting a TOR hidden website (xtpdvz6dnj5nnpe7.onion). This hidden website is also a known TOR address from the ransom of CryptoWall 3.0. It's using NGINX proxy to forward requests. The POST requests that we're seeing are all the different WordPress sites forwarding the requests to the MotherShip and the parameter on each of these requests are the RC4 key for decrypting the communication.
 
-![Accessing the ransom page directly](/images/decrypt-service.png)
+<figure>
+<img src="/images/decrypt-service.png" alt="Accessing the ransom page directly">
+  <figcaption>Accessing the ransom page directly</figcaption>
+</figure>
 
 By taking a look at the [autonomous system information](http://bgp.he.net/AS48757), we saw that the ISP TrustInfo has 3 subnets. We decided to investigate further in those subnets, searching for servers that had the same ports open with the same version of services. For instance, we looked for hosts that had port 22 with OpenSSH version 6.0 responding to the criteria and port 80 with NGINX 1.2.1. One subnet in particular, 95.128.180.0/22 had a lots of hosts responding to this criteria.
 
 After verifying each of them, by establishing if the page http://ip/server-status/ showed us the same TOR address and had the same uptime, we found 9 more servers than the two previously discovered:
 
-![CryptoWall 3.0 architecture](/images/schema-1024x734.png)
+<figure>
+<img src="/images/schema-1024x734.png" alt="CryptoWall 3.0 architecture">
+  <figcaption>CryptoWall 3.0 architecture</figcaption>
+</figure>
 
 Thus, motherships servers are playing at least two roles: forwarding the requests of infected victims and supporting the TOR website to pay the ransom. Since NGINX is installed on all of them, and they all refer to the same Apache server, they seem to serve only as a gateway, so that makes us believe that the secrete keys are stored elsewhere, well kept away from us.
 
@@ -203,13 +227,25 @@ At first look, it seems to be the management page for the owners of CryptoWall. 
 
 After monitoring the status page, we also did some statistics:
 
-![Request type received by the server](/images/requests-type-300x207.png)
+<figure>
+<img src="/images/requests-type-300x207.png" alt="Request type received by the server">
+  <figcaption>Request type received by the server</figcaption>
+</figure>
 
-![CPU load over time](/images/average-CPU-load-1024x356.png)
+<figure>
+<img src="/images/average-CPU-load-1024x356.png" alt="CPU load over time">
+  <figcaption>CPU load over time</figcaption>
+</figure>
 
-![Total access requests to the server over time](/images/Total-access-1024x208.png)
+<figure>
+<img src="/images/Total-access-1024x208.png" alt="Total access requests to the server over time">
+  <figcaption>Total access requests to the server over time</figcaption>
+</figure>
 
-![At its peak, the server behind the proxy has processed almost 44 GB of data in 30 days](/images/status-at-peak.png)
+<figure>
+<img src="/images/status-at-peak.png" alt="At its peak, the server behind the proxy has processed almost 44 GB of data in 30 days">
+  <figcaption>At its peak, the server behind the proxy has processed almost 44 GB of data in 30 days</figcaption>
+</figure>
 
 **Protection against ransomware**
 
