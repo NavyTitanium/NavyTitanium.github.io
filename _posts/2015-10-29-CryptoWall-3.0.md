@@ -165,7 +165,7 @@ We then used Elastic Search and Kibana to visually represent the data:
 </figure>
 
 <figure>
-<img src="/imagesuser-request-second-file-1024x440.png" alt="Requests made to the second WordPress site over 88 hours">
+<img src="/images/user-request-second-file-1024x440.png" alt="Requests made to the second WordPress site over 88 hours">
   <figcaption>Requests made to the second WordPress site over 88 hours</figcaption>
 </figure>
 
