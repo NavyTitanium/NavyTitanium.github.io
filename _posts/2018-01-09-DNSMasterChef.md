@@ -437,7 +437,7 @@ Note that this python script is only meant to be a Proof Of Concept and by no me
 The worst execution time will be achieved when the domain is safe:
  Time to query Google DNS + Time of the slowest DNS provider to answer the query.
  
-![Requests filter](/images/filtering.png)
+![Requests filter](/images/2018/filtering.png)
 
 Full scripts and configuration files are on my [GitHub page](https://github.com/NavyTitanium/DNSMasterChef)
 
