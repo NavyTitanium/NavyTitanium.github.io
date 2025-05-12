@@ -1,8 +1,8 @@
 ---
 layout: post
 title: "pfSense vulnerabilities: CVE-2024-57273, CVE-2024-54780, and CVE-2024-54779"
-date: 2025-05-15
-description: Breaking pfSense: XML, Command Injection & Cloud Backup Hijacking
+date: 2025-05-12
+description: "Breaking pfSense: XML, Command Injection & Cloud Backup Hijacking"
 permalink: /exploiting-pfsense-xss-command-injection-cloud-hijack/
 ---
 
