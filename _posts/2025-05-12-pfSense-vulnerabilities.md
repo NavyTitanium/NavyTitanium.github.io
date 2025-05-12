@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "pfSense vulnerabilities: CVE-2024-57273, CVE-2024-54780, and CVE-2024-54779"
+title: "Breaking pfSense: XML, Command Injection & Cloud Backup Hijacking"
 date: 2025-05-12
 description: "Breaking pfSense: XML, Command Injection & Cloud Backup Hijacking"
 permalink: /exploiting-pfsense-xss-command-injection-cloud-hijack/
@@ -16,7 +16,7 @@ All vulnerabilities discussed in this post were responsibly disclosed to Netgate
 
 # CVE-2024-57273
 
-The free-to-use Netgate service for cloud backups allows a pfSense firewall to store and retrieve data on their server at **acb.netgate.com**. Hijacking of ACB (**Automatic Configuration Backup**) service key can lead to:
+The free-to-use Netgate service for cloud backups allows a pfSense firewall to store and retrieve data on their server at **acb.netgate.com**. The hijacking of ACB (**Automatic Configuration Backup**) service key can lead to:
 
 * Deletion of cloud backups
 * Injection of Javascript code (XSS) in the GUI 
@@ -28,7 +28,9 @@ For this vulnerability to be exploited, two things must be enabled:
 * ACB configured (not enabled by default)
 
 To enable this functionality, the administrator browses to the page `/services_acb_settings.php`:
-![[/images/2025/ACB_Settings.png]]
+
+![/images/2025/ACB_Settings.png]
+
 Behind the scenes, the firewall sends POST queries to **acb.netgate.com** at these different endpoints:
 * `/getbkp`, to retrieve a specific encrypted backup to restore
 *  `/list` - to retrieve the list of previous backups and display them in the "restore tab" 
@@ -36,9 +38,10 @@ Behind the scenes, the firewall sends POST queries to **acb.netgate.com** at the
 *  `/rmbkp` - to delete a preexisting cloud backup
 
 Interestingly, the API key needed to interact with your backups is the hash of the public SSH key generated in `/etc/ssh/ssh_host_ed25519_key.pub`. The computed key is also displayed in the "Backup now" tab:
-![[/images/2025/acb_device_key.png]]
 
-The key is automatically computed by the appliance if it doesn't exist using this command:
+![/images/2025/acb_device_key.png]
+
+If the key does not exist, the appliance generates it automatically using this command:
 ```php
 // If there is no ssh key in the system to identify this firewall, generate a pair now
 exec("/usr/bin/nice -n20 /usr/bin/ssh-keygen -t ed25519 -b 4096 -N '' -f /etc/ssh/ssh_host_ed25519_key");
@@ -49,11 +52,12 @@ However, it is easy to reconstruct the content of an SSH public key if the servi
 ### Exploitation
 
 At this point, I was curious to see if an attacker could manipulate the information stored in the **ACB** backup server so that unexpected behaviors would be triggered on the pfSense firewall when queried. It turns out that the ACB server's logic is not very restrictive, allowing the saving of pretty much any text content in various fields, including the date, reason, and the actual backup content. This allows saving a JavaScript payload in the "reason" field: 
-![[/images/2025/ACB_Burp.png]]
+
+![/images/2025/ACB_Burp.png]
 
 Subsequently, when an administrator visits the page `/services_acb.php`, the appliance's logic to retrieve the list of backups (`POST /list`) will fetch the poisoned list:
 
-![[/images/2025/ACB_Burp-2.png]]
+![/images/2025/ACB_Burp-2.png]
 
 Finally, the returned backup "reason" is displayed in the page without any further filtering, as per this PHP code:
 
@@ -73,9 +77,9 @@ Retrieving full backup configs is also possible, but they are encrypted using AE
 See the pfSense bugtracker for additional details:
 * https://redmine.pfsense.org/issues/15927
 ### Timeline
-2024-12-11 - Vulnerability reported to security@netgate.com
-2024-12-12 - XSS mitigation pushed to [master](https://github.com/pfsense/pfsense/commit/84d8eddf87607e0f9dcc313bcaad4db67e4f3750) 
-2025-02-24 - CVE assigned
+* 2024-12-11 - Vulnerability reported to security@netgate.com
+* 2024-12-12 - XSS mitigation pushed to [master](https://github.com/pfsense/pfsense/commit/84d8eddf87607e0f9dcc313bcaad4db67e4f3750) 
+* 2025-02-24 - CVE assigned
 
 # CVE-2024-54780
 
@@ -112,22 +116,23 @@ function openvpn_kill_client($port, $remipp, $client_id) {
 [...]
 ```
 
-This allows a user to send a newline character (**%0A**) followed by another command. For example:
+This allows a user to inject a newline character (**%0A**) followed by a secondary command. For example:
 
-```remipp=5%0Astatus```
+`remipp=5%0Astatus`
 
 The above payload results in two commands being executed: **kill 5** and **status**.
 ### Impact
 
-The impact is fairly low as the user doesn't receive any output from the resulting commands, and the interface only allows a limited set of functions to manage the VPN server rather than arbitrary shell commands.
+The impact is fairly low, as the user doesn't receive any output from the resulting commands, and the interface only allows a limited set of functions to manage the VPN server rather than arbitrary shell commands.
 
 See the pfSense bugtracker for additional details:
 * https://redmine.pfsense.org/issues/15856
 ### Timeline
-2024-11-19 - Vulnerability reported to security@netgate.com
-2024-11-22 - Patch provided
-2024-12-02 - [Fix](https://github.com/pfsense/pfsense/commit/92a55a0ad8976975b320bdff11f0512f59d3a2ab) pushed to master
-2025-01-07 - CVE assigned
+* 2024-11-19 - Vulnerability reported to security@netgate.com
+* 2024-11-22 - Patch provided
+* 2024-12-02 - [Fix](https://github.com/pfsense/pfsense/commit/92a55a0ad8976975b320bdff11f0512f59d3a2ab) pushed to master
+* 2025-01-07 - CVE assigned
+
 # CVE-2024-54779
 
 Any authenticated user with access to dashboard widgets in **pfSense** can inject arbitrary XML structures into the main configuration file via the **widgetkey** parameter. This vulnerability allows attackers to not only corrupt the configuration file causing denial of service, but also execute stored XSS attacks against administrators who access the dashboard. The fundamental flaw exists in how the widget framework processes and stores user input without proper validation or sanitization. Most dashboard components and some external packages are affected because they share this vulnerable code pattern.
@@ -143,7 +148,7 @@ save_widget_settings($_SESSION['Username'], $user_settings["widgets"]);
 
 This code directly inserts the value of `$_POST['widgetkey']` as an XML key in the config file. To demonstrate, we can configure the **S.M.A.R.T Status** widget and observe how the injected value appears in the configuration file. The same behavior occurs with other dashboard widgets.
 
-![[/images/2025/SMART_Widget-xml.png]]
+![/images/2025/SMART_Widget-xml.png]
 
 The field `descr` for _description_ gets escaped properly in all cases, but the field `widgetkey` is left unsanitized for manipulation, and then written to the main configuration file with its corresponding closing tag. In other words, sending `widgetkey=atag` will also write `</atag>`.
 ### Denial of service
@@ -157,7 +162,7 @@ The most immediate impact of this vulnerability is the ability to corrupt the co
 </none/>>
 ```
 
-Since this is invalid XML, this makes the file **config.xml** non-compliant. Because it is used upon boot, this will generate PHP Fatal errors and even prevent the application from bootstrapping properly, effectively breaking the firewall application and its services (even SSH) entirely:
+This results in a non-compliant **config.xml** due to invalid XML structure. Because it is used upon boot, this will generate PHP Fatal errors and even prevent the application from bootstrapping properly, effectively breaking the firewall application and its services (even SSH) entirely:
 
 ```php
 PHP Fatal error:  Uncaught TypeError: Cannot access offset of type string on string in /etc/inc/xmlparse.inc:73
@@ -172,14 +177,16 @@ Stack trace:
 
 ### Attempting Privilege Escalation
 
-Further exploitation attempts focused on achieving privilege escalation through code execution by overwriting critical parts of the configuration file **config.xml** like the `system` tag. In these sections of the configuration file, the firewall sets the users' password hashes and their privileges.
+Further exploitation attempts focused on achieving privilege escalation through configuration tampering by overwriting critical parts of the configuration file **config.xml** like the `system` tag. In these sections of the configuration file, the firewall sets the users' password hashes and their privileges.
 
 For instance, it is possible to close the `</widgets>` tag within the payload, open new tags such as `<system>`, and comment out the rest of the generated data using XML comment tag `<!--`:
 
-**Payload** : `widgetkey=/widgets><system><ssh><enable>enabled</enable></ssh></system><widgets><!--`
+**Payload** : 
+`widgetkey=/widgets><system><ssh><enable>enabled</enable></ssh></system><widgets><!--`
+
 **Generated XML in config.xml on the appliance**: 
 
-![[/images/2025/XML_Manipulation.png]]
+![/images/2025/XML_Manipulation.png]
 
 However, it turns out that it is only possible to modify entries within the `<widgets>` XML tags without corrupting the file, as the parser is expecting unique tags:
 ```php
@@ -189,7 +196,8 @@ Fatal error: Uncaught Exception: XML error: SYSTEM at line 286 cannot occur more
 ### Stored XSS
 
 While looking at ways to make use of my injected XML data, I found that the **Firewall Logs** widget shipped with pfSense retrieves data from the configuration file without sanitization and outputs it within `<script>` tags.
- ![[/images/2025/Firewall_logs_widget.png]]
+ ![/images/2025/Firewall_logs_widget.png]
+ 
  
 The logic in the file **/www/widgets/widgets/log.widget.php** retrieves the value `$nentriesinterval` from user settings (stored as XML in the main configuration file):
 ```php
@@ -240,12 +248,12 @@ See the pfSense bugtracker for additional details:
 * https://redmine.pfsense.org/issues/15844
 
 ### Timeline
-2024-11-15 - Vulnerability reported to security@netgate.com
-2024-11-15 - Vulnerability acknowledged
-2024-12-02 - [Fix](https://github.com/pfsense/pfsense/commit/04b74da157709a89b7b032a91d72f7697d17f7fc) pushed to master on all widgets
-2024-12-02 - Found a work-around for the patch
-2024-12-03 - Another patch was provided. PHP directive **request_order** [updated](https://github.com/pfsense/pfsense/commit/738f647c453a8995c6b411f91efb66c17a0d6c11) on pfSense master.
-2025-01-07 - CVE assigned
+* 2024-11-15 - Vulnerability reported to security@netgate.com
+* 2024-11-15 - Vulnerability acknowledged
+* 2024-12-02 - [Fix](https://github.com/pfsense/pfsense/commit/04b74da157709a89b7b032a91d72f7697d17f7fc) pushed to master on all widgets
+* 2024-12-02 - Found a work-around for the patch
+* 2024-12-03 - Another patch was provided. PHP directive **request_order** [updated](https://github.com/pfsense/pfsense/commit/738f647c453a8995c6b411f91efb66c17a0d6c11) on pfSense master.
+* 2025-01-07 - CVE assigned
 
 # Disclaimer
 
