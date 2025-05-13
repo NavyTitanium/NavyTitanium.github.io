@@ -6,15 +6,15 @@ description: "Breaking pfSense: XML, Command Injection & Cloud Backup Hijacking"
 permalink: /exploiting-pfsense-xss-command-injection-cloud-hijack/
 ---
 
-This post documents three recently disclosed vulnerabilities in pfSense: 
-
-1. **CVE-2024-57273**: ACB cloud backup key derivation flaw enables unauthorized backup manipulation and stored XSS.
-2. **CVE-2024-54780**: Authenticated command injection in the OpenVPN widget via unsanitized input parameter.
-3. **CVE-2024-54779**: XML injection in dashboard widgets allows configuration corruption (DoS) and persistent XSS attacks.
-
+This post documents three recently disclosed vulnerabilities in pfSense.
 All vulnerabilities discussed in this post were responsibly disclosed to Netgate between **November and December 2024**. As of publication, more than **150 days** have passed since initial contact, well beyond the standard 90-day disclosure window. Fixes are currently available in the public **pfSense 2.8.0 beta**, the **GitHub master branch**, and have also been made available to **pfSense Plus** users via their early access channels. While the CE stable release is still pending, this post is published to promote transparency, recognize the research, and encourage timely patch adoption.
 
-# CVE-2024-57273
+# ACB Cloud Backup Key Hijack & Stored XSS
+**Affected Product**: pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds
+
+**Vulnerability Type**: ACB cloud backup key derivation flaw enables unauthorized backup manipulation and stored XSS
+
+**CVE ID**: CVE-2024-57273
 
 The free-to-use Netgate service for cloud backups allows a pfSense firewall to store and retrieve data on their server at **acb.netgate.com**. The hijacking of ACB (**Automatic Configuration Backup**) service key can lead to:
 
@@ -81,7 +81,12 @@ See the pfSense bugtracker for additional details:
 * 2024-12-12 - XSS mitigation pushed to [master](https://github.com/pfsense/pfsense/commit/84d8eddf87607e0f9dcc313bcaad4db67e4f3750) 
 * 2025-02-24 - CVE assigned
 
-# CVE-2024-54780
+# OpenVPN Widget Command Injection
+**Affected Product**: pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds
+
+**Vulnerability Type**: Authenticated command injection in the OpenVPN widget via unsanitized input parameter
+
+**CVE ID**: CVE-2024-54780
 
 This vulnerability is a simple authenticated command injection in the OpenVPN management interface. Authenticated users with permission to the main Dashboard can send a malicious payload via the **remipp** field, which is used to terminate a client connection. This value is passed to the function `openvpn_kill_client` without proper filtering. The function connects to the OpenVPN management interface via a Unix socket and writes: `"kill {$remipp}\n"`.
 ### Vulnerability Details
@@ -133,7 +138,12 @@ See the pfSense bugtracker for additional details:
 * 2024-12-02 - [Fix](https://github.com/pfsense/pfsense/commit/92a55a0ad8976975b320bdff11f0512f59d3a2ab) pushed to master
 * 2025-01-07 - CVE assigned
 
-# CVE-2024-54779
+# XML Injection in Dashboard Widgets
+**Affected Product**: pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds
+
+**Vulnerability Type**: XML injection in dashboard widgets allows configuration corruption (DoS) and persistent XSS attacks
+
+**CVE ID**: CVE-2024-54779
 
 Any authenticated user with access to dashboard widgets in **pfSense** can inject arbitrary XML structures into the main configuration file via the **widgetkey** parameter. This vulnerability allows attackers to not only corrupt the configuration file causing denial of service, but also execute stored XSS attacks against administrators who access the dashboard. The fundamental flaw exists in how the widget framework processes and stores user input without proper validation or sanitization. Most dashboard components and some external packages are affected because they share this vulnerable code pattern.
 
