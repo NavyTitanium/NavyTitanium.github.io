@@ -9,7 +9,7 @@ permalink: /exploiting-pfsense-xss-command-injection-cloud-hijack/
 This post documents three recently disclosed vulnerabilities in pfSense.
 All vulnerabilities discussed in this post were responsibly disclosed to Netgate between **November and December 2024**. As of publication, more than **150 days** have passed since initial contact, well beyond the standard 90-day disclosure window. Fixes are currently available in the public **pfSense 2.8.0 beta**, the **GitHub master branch**, and have also been made available to **pfSense Plus** users via their early access channels. While the CE stable release is still pending, this post is published to promote transparency, recognize the research, and encourage timely patch adoption.
 
-> ---
+---
 
 # 🔒 ACB Cloud Backup Key Hijack & Stored XSS
 **Affected Product**: pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds
@@ -83,7 +83,7 @@ See the pfSense bugtracker for additional details:
 * 2024-12-12 - XSS mitigation pushed to [master](https://github.com/pfsense/pfsense/commit/84d8eddf87607e0f9dcc313bcaad4db67e4f3750) 
 * 2025-02-24 - CVE assigned
 
-> ---
+---
 
 # 🔒 OpenVPN Widget Command Injection
 **Affected Product**: pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds
@@ -142,7 +142,7 @@ See the pfSense bugtracker for additional details:
 * 2024-12-02 - [Fix](https://github.com/pfsense/pfsense/commit/92a55a0ad8976975b320bdff11f0512f59d3a2ab) pushed to master
 * 2025-01-07 - CVE assigned
 
-> ---
+---
 
 # 🔒 XML Injection in Dashboard Widgets
 **Affected Product**: pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds
