@@ -32,7 +32,7 @@ To enable this functionality, the administrator browses to the page `/services_a
 ![](/images/2025/ACB_Settings.png)
 
 Behind the scenes, the firewall sends POST queries to **acb.netgate.com** at these different endpoints:
-* `/getbkp`, to retrieve a specific encrypted backup to restore
+* `/getbkp` - to retrieve a specific encrypted backup to restore
 *  `/list` - to retrieve the list of previous backups and display them in the "restore tab" 
 *  `/save` - to add (save) a backup in the cloud 
 *  `/rmbkp` - to delete a preexisting cloud backup
