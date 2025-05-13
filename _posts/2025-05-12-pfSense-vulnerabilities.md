@@ -9,7 +9,9 @@ permalink: /exploiting-pfsense-xss-command-injection-cloud-hijack/
 This post documents three recently disclosed vulnerabilities in pfSense.
 All vulnerabilities discussed in this post were responsibly disclosed to Netgate between **November and December 2024**. As of publication, more than **150 days** have passed since initial contact, well beyond the standard 90-day disclosure window. Fixes are currently available in the public **pfSense 2.8.0 beta**, the **GitHub master branch**, and have also been made available to **pfSense Plus** users via their early access channels. While the CE stable release is still pending, this post is published to promote transparency, recognize the research, and encourage timely patch adoption.
 
-# ACB Cloud Backup Key Hijack & Stored XSS
+> ---
+
+# 🔒 ACB Cloud Backup Key Hijack & Stored XSS
 **Affected Product**: pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds
 
 **Vulnerability Type**: ACB cloud backup key derivation flaw enables unauthorized backup manipulation and stored XSS
@@ -72,7 +74,7 @@ Finally, the returned backup "reason" is displayed in the page without any furth
 
 In summary, if you are using this cloud service and have SSH exposed, it is easy for someone to derive the key and delete your cloud backups or poison them. Also, since pfSense has a built-in webshell, XSS payloads can lead to RCE as demonstrated [here](https://github.com/EQSTLab/CVE-2024-46538). 
 
-Retrieving full backup configs is also possible, but they are encrypted using AES-256 with a user-provided password of at least 8 characters. The patch prevent the XSS and allows admins to set a different API key manually.
+Retrieving full backup configs is also possible, but they are encrypted using AES-256 with a user-provided password of at least 8 characters. The patch prevents the XSS and allows admins to set a different API key manually.
 
 See the pfSense bugtracker for additional details:
 * https://redmine.pfsense.org/issues/15927
@@ -81,7 +83,9 @@ See the pfSense bugtracker for additional details:
 * 2024-12-12 - XSS mitigation pushed to [master](https://github.com/pfsense/pfsense/commit/84d8eddf87607e0f9dcc313bcaad4db67e4f3750) 
 * 2025-02-24 - CVE assigned
 
-# OpenVPN Widget Command Injection
+> ---
+
+# 🔒 OpenVPN Widget Command Injection
 **Affected Product**: pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds
 
 **Vulnerability Type**: Authenticated command injection in the OpenVPN widget via unsanitized input parameter
@@ -138,7 +142,9 @@ See the pfSense bugtracker for additional details:
 * 2024-12-02 - [Fix](https://github.com/pfsense/pfsense/commit/92a55a0ad8976975b320bdff11f0512f59d3a2ab) pushed to master
 * 2025-01-07 - CVE assigned
 
-# XML Injection in Dashboard Widgets
+> ---
+
+# 🔒 XML Injection in Dashboard Widgets
 **Affected Product**: pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds
 
 **Vulnerability Type**: XML injection in dashboard widgets allows configuration corruption (DoS) and persistent XSS attacks
@@ -240,7 +246,7 @@ logsObject.freq = 5;alert("XSS");var test=50/5;
 ```
 ### Displaying the vulnerable widget
 
-*Forced Widget Display Regardless of User Preferences*
+*Forcing Widget Display Regardless of User Preferences*
 
 Even if the administrator is not using the widget (e.g., it is not appearing on the main dashboard upon login), we can easily inject more XML along with this payload in such a way that the widget will get displayed when anyone logs in.
 
