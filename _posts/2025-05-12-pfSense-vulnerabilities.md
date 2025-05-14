@@ -273,6 +273,8 @@ See the pfSense bugtracker for additional details:
 * 2024-12-02 - Found a work-around for the patch
 * 2024-12-03 - Another patch was provided. PHP directive **request_order** [updated](https://github.com/pfsense/pfsense/commit/738f647c453a8995c6b411f91efb66c17a0d6c11) on pfSense master.
 * 2025-01-07 - CVE assigned
+  
+---
 
 # Disclaimer
 
