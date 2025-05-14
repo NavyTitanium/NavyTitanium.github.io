@@ -15,7 +15,9 @@ All vulnerabilities discussed in this post were responsibly disclosed to Netgate
 
 <div style="background-color: #f3f0ff; padding: 15px; border-left: 4px solid #ccc; margin: 1em 0;">
 <strong>Affected Product:</strong> pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds
+	
 <strong>Vulnerability Type:</strong> ACB cloud backup key derivation flaw enables unauthorized backup manipulation and stored XSS
+	
 <strong>CVE ID:</strong> CVE-2024-57273
 </div>
 
