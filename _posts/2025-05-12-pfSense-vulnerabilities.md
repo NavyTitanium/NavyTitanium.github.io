@@ -87,11 +87,12 @@ See the pfSense bugtracker for additional details:
 ---
 
 # 🔒 OpenVPN Widget Command Injection
-**Affected Product**: pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds
 
-**Vulnerability Type**: Authenticated command injection in the OpenVPN widget via unsanitized input parameter
-
-**CVE ID**: CVE-2024-54780
+<div style="background-color: #f3f0ff; padding: 15px; border-left: 4px solid #ccc; margin: 1em 0;">
+<strong>Affected Product:</strong> pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds<br>
+<strong>Vulnerability Type:</strong> Authenticated command injection in the OpenVPN widget via unsanitized input parameter<br>
+<strong>CVE ID:</strong> CVE-2024-54780
+</div>
 
 This vulnerability is a simple authenticated command injection in the OpenVPN management interface. Authenticated users with permission to the main Dashboard can send a malicious payload via the **remipp** field, which is used to terminate a client connection. This value is passed to the function `openvpn_kill_client` without proper filtering. The function connects to the OpenVPN management interface via a Unix socket and writes: `"kill {$remipp}\n"`.
 ### Vulnerability Details
@@ -146,11 +147,12 @@ See the pfSense bugtracker for additional details:
 ---
 
 # 🔒 XML Injection in Dashboard Widgets
-**Affected Product**: pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds
 
-**Vulnerability Type**: XML injection in dashboard widgets allows configuration corruption (DoS) and persistent XSS attacks
-
-**CVE ID**: CVE-2024-54779
+<div style="background-color: #f3f0ff; padding: 15px; border-left: 4px solid #ccc; margin: 1em 0;">
+<strong>Affected Product:</strong> pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds<br>
+<strong>Vulnerability Type:</strong> XML injection in dashboard widgets allows configuration corruption (DoS) and persistent XSS attacks<br>
+<strong>CVE ID:</strong> CVE-2024-54779
+</div>
 
 Any authenticated user with access to dashboard widgets in **pfSense** can inject arbitrary XML structures into the main configuration file via the **widgetkey** parameter. This vulnerability allows attackers to not only corrupt the configuration file causing denial of service, but also execute stored XSS attacks against administrators who access the dashboard. The fundamental flaw exists in how the widget framework processes and stores user input without proper validation or sanitization. Most dashboard components and some external packages are affected because they share this vulnerable code pattern.
 
