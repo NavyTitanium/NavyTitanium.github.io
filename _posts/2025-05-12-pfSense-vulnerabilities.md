@@ -12,11 +12,14 @@ All vulnerabilities discussed in this post were responsibly disclosed to Netgate
 ---
 
 # 🔒 ACB Cloud Backup Key Hijack & Stored XSS
-**Affected Product**: pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds
 
-**Vulnerability Type**: ACB cloud backup key derivation flaw enables unauthorized backup manipulation and stored XSS
-
-**CVE ID**: CVE-2024-57273
+<div style="background-color: #f3f0ff; padding: 15px; border-left: 4px solid #ccc; margin: 1em 0;">
+<strong>Affected Product:</strong> pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds
+</br>
+<strong>Vulnerability Type:</strong> ACB cloud backup key derivation flaw enables unauthorized backup manipulation and stored XSS  
+</br>
+<strong>CVE ID:</strong> CVE-2024-57273
+</div>
 
 The free-to-use Netgate service for cloud backups allows a pfSense firewall to store and retrieve data on their server at **acb.netgate.com**. The hijacking of ACB (**Automatic Configuration Backup**) service key can lead to:
 
