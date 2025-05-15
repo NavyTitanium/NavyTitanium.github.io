@@ -3,6 +3,7 @@ layout: post
 title: "Breaking pfSense: XML, Command Injection & Cloud Backup Hijacking"
 date: 2025-05-12
 description: "Breaking pfSense: XML, Command Injection & Cloud Backup Hijacking"
+tags: [pfSense vulnerabilities, CVE-2024-54779, CVE-2024-54780, CVE-2024-57273, ACB Cloud key hijack, command injection, XML injection]
 permalink: /exploiting-pfsense-xss-command-injection-cloud-hijack/
 ---
 
@@ -11,7 +12,7 @@ All vulnerabilities discussed in this post were responsibly disclosed to Netgate
 
 ---
 
-# 🔒 ACB Cloud Backup Key Hijack & Stored XSS
+# 🔒 ACB Cloud Backup Key Hijack & Stored XSS (CVE-2024-57273)
 
 <div style="background-color: #f3f0ff; padding: 15px; border-left: 4px solid #ccc; margin: 1em 0;">
 <strong>Affected Product:</strong> pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds<br>
@@ -32,7 +33,7 @@ For this vulnerability to be exploited, two things must be enabled:
 
 To enable this functionality, the administrator browses to the page `/services_acb_settings.php`:
 
-![](/images/2025/ACB_Settings.png)
+![ACB Settings](/images/2025/ACB_Settings.png)
 
 Behind the scenes, the firewall sends POST queries to **acb.netgate.com** at these different endpoints:
 * `/getbkp` - to retrieve a specific encrypted backup to restore
@@ -42,7 +43,7 @@ Behind the scenes, the firewall sends POST queries to **acb.netgate.com** at the
 
 Interestingly, the API key needed to interact with your backups is the hash of the public SSH key generated in `/etc/ssh/ssh_host_ed25519_key.pub`. The computed key is also displayed in the "Backup now" tab:
 
-![](/images/2025/acb_device_key.png)
+![ACB key](/images/2025/acb_device_key.png)
 
 If the key does not exist, the appliance generates it automatically using this command:
 ```php
@@ -56,11 +57,11 @@ However, it is easy to reconstruct the content of an SSH public key if the servi
 
 At this point, I was curious to see if an attacker could manipulate the information stored in the **ACB** backup server so that unexpected behaviors would be triggered on the pfSense firewall when queried. It turns out that the ACB server's logic is not very restrictive, allowing the saving of pretty much any text content in various fields, including the date, reason, and the actual backup content. This allows saving a JavaScript payload in the "reason" field: 
 
-![](/images/2025/ACB_Burp.png)
+![ACB request](/images/2025/ACB_Burp.png)
 
 Subsequently, when an administrator visits the page `/services_acb.php`, the appliance's logic to retrieve the list of backups (`POST /list`) will fetch the poisoned list:
 
-![](/images/2025/ACB_Burp-2.png)
+![ACB list](/images/2025/ACB_Burp-2.png)
 
 Finally, the returned backup "reason" is displayed in the page without any further filtering, as per this PHP code:
 
@@ -86,7 +87,7 @@ See the pfSense bugtracker for additional details:
 
 ---
 
-# 🔒 OpenVPN Widget Command Injection
+# 🔒 OpenVPN Widget Command Injection (CVE-2024-54780)
 
 <div style="background-color: #f3f0ff; padding: 15px; border-left: 4px solid #ccc; margin: 1em 0;">
 <strong>Affected Product:</strong> pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds<br>
@@ -146,7 +147,7 @@ See the pfSense bugtracker for additional details:
 
 ---
 
-# 🔒 XML Injection in Dashboard Widgets
+# 🔒 XML Injection in Dashboard Widgets (CVE-2024-54779)
 
 <div style="background-color: #f3f0ff; padding: 15px; border-left: 4px solid #ccc; margin: 1em 0;">
 <strong>Affected Product:</strong> pfSense CE (prior to 2.8.0 beta release) and corresponding Plus builds<br>
@@ -167,7 +168,7 @@ save_widget_settings($_SESSION['Username'], $user_settings["widgets"]);
 
 This code directly inserts the value of `$_POST['widgetkey']` as an XML key in the config file. To demonstrate, we can configure the **S.M.A.R.T Status** widget and observe how the injected value appears in the configuration file. The same behavior occurs with other dashboard widgets.
 
-![](/images/2025/SMART_Widget-xml.png)
+![widgetkey](/images/2025/SMART_Widget-xml.png)
 
 The field `descr` for _description_ gets escaped properly in all cases, but the field `widgetkey` is left unsanitized for manipulation, and then written to the main configuration file with its corresponding closing tag. In other words, sending `widgetkey=atag` will also write `</atag>`.
 ### Denial of service
@@ -205,7 +206,7 @@ For instance, it is possible to close the `</widgets>` tag within the payload, o
 
 **Generated XML in config.xml on the appliance**: 
 
-![](/images/2025/XML_Manipulation.png)
+![widget payload](/images/2025/XML_Manipulation.png)
 
 However, it turns out that it is only possible to modify entries within the `<widgets>` XML tags without corrupting the file, as the parser is expecting unique tags:
 ```php
@@ -215,7 +216,7 @@ Fatal error: Uncaught Exception: XML error: SYSTEM at line 286 cannot occur more
 ### Stored XSS
 
 While looking at ways to make use of my injected XML data, I found that the **Firewall Logs** widget shipped with pfSense retrieves data from the configuration file without sanitization and outputs it within `<script>` tags.
-![](/images/2025/Firewall_logs_widget.png)
+![firewall logs](/images/2025/Firewall_logs_widget.png)
  
  
 The logic in the file **/www/widgets/widgets/log.widget.php** retrieves the value `$nentriesinterval` from user settings (stored as XML in the main configuration file):
